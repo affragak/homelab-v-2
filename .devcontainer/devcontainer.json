@@ -1,0 +1,15 @@
+{
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "remoteEnv": {
+    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}",
+    "VAULT_USERNAME": "${localEnv:VAULT_USERNAME}",
+    "VAULT_PASSWORD": "${localEnv:VAULT_PASSWORD}"
+  },
+  "forwardPorts": [
+    "8088"
+  ],
+  "postCreateCommand": ".devcontainer/scripts/setup"
+}

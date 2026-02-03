@@ -1,0 +1,5 @@
+[tools]
+cilium-cli = "latest"
+kubectl = "latest"
+talosctl = "latest"
+terraform = "latest"

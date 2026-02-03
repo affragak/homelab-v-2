@@ -1,0 +1,52 @@
+####################################
+# Admin / cluster access (SENSITIVE)
+####################################
+/admin/
+.envrc
+####################################
+# Terraform - sensitive & generated
+####################################
+
+# Terraform state
+**/terraform.tfstate
+**/terraform.tfstate.*
+**/*.tfstate
+**/*.tfstate.*
+
+# Terraform variable files (often contain secrets)
+**/*.tfvars
+**/*.tfvars.json
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform local directories
+**/.terraform/
+**/.terraform.lock.hcl
+
+####################################
+# Terraform plan files
+####################################
+**/*.tfplan
+**/*.plan
+
+####################################
+# Backup & temp files
+####################################
+*~
+*.bak
+*.tmp
+
+####################################
+# IDE / Editor
+####################################
+.vscode/
+.idea/
+.DS_Store
+
+####################################
+# OS / Misc
+####################################
+Thumbs.db
+
