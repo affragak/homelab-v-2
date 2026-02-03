@@ -2,5 +2,6 @@
 cilium-cli = "latest"
 flux2 = "latest"
 kubectl = "latest"
+kubens = "latest"
 talosctl = "latest"
 terraform = "latest"
