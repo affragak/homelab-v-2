@@ -8,10 +8,11 @@ This repository contains the Infrastructure as Code (IaC) used to deploy a Kuber
 - **Operating System**: Talos Linux
 - **Kubernetes**: Talos-managed Kubernetes
 - **CNI**: Cilium
+- **GitOps**: Flux CD
 - **Provisioning & Bootstrap**: Terraform
 - **Initial Node Boot**: PXE using `siderolabs/booter`
 
-The entire lifecycle — from VM creation to Talos bootstrap and CNI installation — is managed declaratively through Terraform with no manual cluster setup steps.
+The entire lifecycle — from VM creation to Talos bootstrap, CNI installation, and GitOps setup — is managed declaratively through Terraform with no manual cluster setup steps.
 
 ## Repository Structure
 
@@ -20,6 +21,9 @@ The entire lifecycle — from VM creation to Talos bootstrap and CNI installatio
 ├── esxi-vms/    # VMware ESXi VM provisioning
 ├── bootstrap/   # Talos cluster bootstrap and configuration
 ├── cni/         # Cilium CNI deployment
+├── flux/        # Flux CD GitOps operator deployment
+├── clusters/    # Flux-managed cluster configurations
+│   └── dev/     # Development cluster manifests
 └── admin/       # Local-only access files (excluded from Git)
 ```
 
@@ -36,6 +40,7 @@ The entire lifecycle — from VM creation to Talos bootstrap and CNI installatio
 - Terraform 1.0+
 - `talosctl` CLI installed
 - `kubectl` CLI installed
+- `flux` CLI installed
 - PXE boot environment configured with `siderolabs/booter`
 
 ## Getting Started
@@ -86,6 +91,15 @@ terraform plan
 terraform apply
 ```
 
+#### Step 4: Install Flux GitOps
+
+```bash
+cd ../flux
+terraform init
+terraform plan
+terraform apply
+```
+
 ### 4. Access Your Cluster
 
 After deployment, retrieve your kubeconfig:
@@ -96,12 +110,30 @@ terraform output -raw kubeconfig > ~/.kube/config
 kubectl get nodes
 ```
 
+### 5. Manage Applications with Flux
+
+Once Flux is installed, you can manage your applications through Git:
+
+```bash
+# Check Flux status
+flux check
+
+# View all Flux resources
+flux get all
+
+# Verify reconciliation
+flux get kustomizations
+```
+
+Add your application manifests to the `clusters/dev/` directory and commit them to Git. Flux will automatically detect and apply the changes to your cluster.
+
 ## Key Features
 
 - **Declarative Infrastructure**: All resources defined as code
 - **Immutable OS**: Talos Linux provides a secure, minimal, and API-driven OS
 - **Automated Bootstrap**: No manual `talosctl` commands required
-- **GitOps Ready**: Prepare your cluster for ArgoCD, Flux, or other GitOps tools
+- **GitOps with Flux**: Continuous deployment and reconciliation of cluster state
+- **GitOps Ready**: Manage your applications and infrastructure through Git
 
 ## Security Notes
 
@@ -124,6 +156,12 @@ kubectl get nodes
 - Ensure Talos cluster is healthy: `kubectl get nodes`
 - Check Cilium logs: `kubectl -n kube-system logs -l app.kubernetes.io/name=cilium`
 
+### Flux not reconciling
+- Check Flux components: `kubectl get pods -n flux-system`
+- View reconciliation status: `flux get all`
+- Check source sync: `flux get sources git`
+- Review Flux logs: `kubectl -n flux-system logs -l app=source-controller`
+
 
 ## License
 
@@ -133,6 +171,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Talos Linux](https://www.talos.dev/) - Secure Kubernetes OS
 - [Cilium](https://cilium.io/) - eBPF-based CNI
+- [Flux CD](https://fluxcd.io/) - GitOps toolkit for Kubernetes
 - [Siderolabs](https://www.siderolabs.com/) - PXE booter and Talos tooling
 
 ---
