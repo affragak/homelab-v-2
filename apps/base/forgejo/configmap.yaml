@@ -22,10 +22,8 @@ data:
   FORGEJO__server__SSH_DOMAIN: git.uclab.dev
   FORGEJO__server__SSH_LISTEN_PORT: "2222"
   FORGEJO__server__SSH_PORT: "2222"
-  FORGEJO__service__DISABLE_REGISTRATION: true
   FORGEJO__session__PROVIDER_CONFIG: /data/app/sessions
 kind: ConfigMap
 metadata:
   name: forgejo-config
   namespace: forgejo
-
